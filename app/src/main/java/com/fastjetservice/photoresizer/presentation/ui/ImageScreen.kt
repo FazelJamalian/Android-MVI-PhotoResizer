@@ -51,7 +51,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -274,7 +273,13 @@ fun OptionsPanel(viewModel: ImageViewModel) {
         )
         OutlinedTextField(
             value = state.height.toString(),
-            onValueChange = { viewModel.handleIntent(ImageIntent.SetHeight(it.toIntOrNull() ?: 0)) },
+            onValueChange = {
+                viewModel.handleIntent(
+                    ImageIntent.SetHeight(
+                        it.toIntOrNull() ?: 0
+                    )
+                )
+            },
             label = { Text("ارتفاع (px)") },
             modifier = Modifier.weight(1f),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
