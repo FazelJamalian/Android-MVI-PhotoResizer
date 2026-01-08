@@ -332,6 +332,7 @@ fun CompressionSettingsSheet(
         }
     }
 }
+/*
 
 @Composable
 private fun GradientSwitch(
@@ -370,6 +371,7 @@ private fun GradientSwitch(
         )
     }
 }
+*/
 
 
 @SuppressLint("ViewModelConstructorInComposable")
