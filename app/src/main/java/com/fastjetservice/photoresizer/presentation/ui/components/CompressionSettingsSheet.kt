@@ -33,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
@@ -60,7 +59,7 @@ import com.fastjetservice.photoresizer.domain.model.EditState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompressionSettingsSheet(
-    state:EditState,
+    state: EditState,
     onCompressMedia: () -> Unit,
     onWidthChange: (it: Int) -> Unit,
     onHeightChange: (it: Int) -> Unit,
@@ -72,7 +71,7 @@ fun CompressionSettingsSheet(
     var width by remember { mutableStateOf(state.originalWidth) }
     var height by remember { mutableStateOf(state.originalHeight) }
     var quality by remember { mutableFloatStateOf(state.quality.toFloat()) }
-   // var lockAspectRatio by remember { mutableStateOf(true) }
+    // var lockAspectRatio by remember { mutableStateOf(true) }
     var isFormatMenuExpanded by remember { mutableStateOf(false) }
     var selectedFormat by remember { mutableStateOf("JPG") } // Default format
     val formatOptions = listOf("JPG", "PNG", "WEBP")
@@ -103,16 +102,16 @@ fun CompressionSettingsSheet(
         Text("All processing happens on your device", color = Color.Gray, fontSize = 12.sp)
 
         Spacer(Modifier.height(16.dp))
-       /* Text("Quick Presets", fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedButton(
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("1080p") }
+        /* Text("Quick Presets", fontWeight = FontWeight.Bold)
+         Spacer(Modifier.height(8.dp))
+         Row(
+             modifier = Modifier.fillMaxWidth(),
+             horizontalArrangement = Arrangement.spacedBy(8.dp)
+         ) {
+             OutlinedButton(
+                 modifier = Modifier.weight(1f),
+                 shape = RoundedCornerShape(8.dp),
+                 onClick = { *//*TODO*//* }) { Text("1080p") }
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
@@ -170,16 +169,16 @@ fun CompressionSettingsSheet(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
-       /* Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            GradientSwitch(
-                checked = lockAspectRatio,
-                onCheckedChange = { lockAspectRatio = it },
-                thumbColor = Color.White
-            )
-            Spacer(Modifier.width(8.dp))
-            Text("Lock aspect ratio")
-        }*/
+        /* Spacer(Modifier.height(8.dp))
+         Row(verticalAlignment = Alignment.CenterVertically) {
+             GradientSwitch(
+                 checked = lockAspectRatio,
+                 onCheckedChange = { lockAspectRatio = it },
+                 thumbColor = Color.White
+             )
+             Spacer(Modifier.width(8.dp))
+             Text("Lock aspect ratio")
+         }*/
 
         Spacer(Modifier.height(16.dp))
         Text("Output Format", fontWeight = FontWeight.Bold)
@@ -191,25 +190,25 @@ fun CompressionSettingsSheet(
                 onValueChange = {
                     selectedFormat = it
                     onFormatChange(it)
-                                },
+                },
                 modifier = Modifier
-                .fillMaxWidth()
-                .clickable { isFormatMenuExpanded = true }, // Open the menu on click
-            readOnly = true,
-            enabled = false, // Disables the text field's own cursor and interactions
-            colors = OutlinedTextFieldDefaults.colors( // Manually set colors to look enabled
-                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledBorderColor = MaterialTheme.colorScheme.outline,
-                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-            ),
-            trailingIcon = {
-                Icon(
-                    Icons.Default.ArrowDropDown,
-                    contentDescription = "Open output format menu"
-                )
-            }
+                    .fillMaxWidth()
+                    .clickable { isFormatMenuExpanded = true }, // Open the menu on click
+                readOnly = true,
+                enabled = false, // Disables the text field's own cursor and interactions
+                colors = OutlinedTextFieldDefaults.colors( // Manually set colors to look enabled
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.ArrowDropDown,
+                        contentDescription = "Open output format menu"
+                    )
+                }
             )
 
             DropdownMenu(
@@ -307,7 +306,7 @@ fun CompressionSettingsSheet(
             onClick = {
                 onCompressMedia()
                 onDismiss()
-                      },
+            },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             contentPadding = PaddingValues(16.dp),
