@@ -111,15 +111,15 @@ fun CompressionSettingsSheet(
              OutlinedButton(
                  modifier = Modifier.weight(1f),
                  shape = RoundedCornerShape(8.dp),
-                 onClick = { *//*TODO*//* }) { Text("1080p") }
+                 onClick = { *//**//* }) { Text("1080p") }
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("720p") }
+                onClick = { *//**//* }) { Text("720p") }
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("480p") }
+                onClick = { *//**//* }) { Text("480p") }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -128,15 +128,15 @@ fun CompressionSettingsSheet(
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("Instagram") }
+                onClick = { *//**//* }) { Text("Instagram") }
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("Story") }
+                onClick = { *//**//* }) { Text("Story") }
             OutlinedButton(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
-                onClick = { *//*TODO*//* }) { Text("Original") }
+                onClick = { *//**//* }) { Text("Original") }
         }
 
         Spacer(Modifier.height(16.dp))*/
@@ -223,8 +223,7 @@ fun CompressionSettingsSheet(
                             onFormatChange(format.lowercase())
                             selectedFormat = format
                             isFormatMenuExpanded = false
-                            // TODO: Add a callback to notify the ViewModel of the change
-                            // e.g., onFormatChange(format)
+
                         }
                     )
                 }
