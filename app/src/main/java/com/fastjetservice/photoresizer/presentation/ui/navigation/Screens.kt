@@ -3,7 +3,6 @@ package com.fastjetservice.photoresizer.presentation.ui.navigation
 sealed class Screens(val route: String) {
     object HomeScreen : Screens("home")
     object EditScreen : Screens("edit")
-    object ImageScreen : Screens("image")
 
 
     fun routeWithArgs(vararg args: String): String =

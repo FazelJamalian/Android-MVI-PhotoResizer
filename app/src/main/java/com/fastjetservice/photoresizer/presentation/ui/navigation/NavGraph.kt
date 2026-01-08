@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.fastjetservice.photoresizer.presentation.ui.ImageScreen
 import com.fastjetservice.photoresizer.presentation.ui.screens.EditScreen
 import com.fastjetservice.photoresizer.presentation.ui.screens.HomeScreen
 
@@ -21,7 +20,8 @@ fun NavGraph() {
         ) {
         composable(route = Screens.HomeScreen.route) { HomeScreen(navController) }
 
-        composable(route = Screens.EditScreen.routeWithArgs("0:uri"),
+        composable(
+            route = Screens.EditScreen.routeWithArgs("0:uri"),
             arguments = listOf(
                 navArgument("0") {
                     type = NavType.StringType
@@ -31,9 +31,6 @@ fun NavGraph() {
             val uri = it.arguments?.getString("0")
             EditScreen(navController, uri = uri?.toUri())
         }
-
-
-        composable(route = Screens.ImageScreen.route) { ImageScreen() }
 
     }
 }
