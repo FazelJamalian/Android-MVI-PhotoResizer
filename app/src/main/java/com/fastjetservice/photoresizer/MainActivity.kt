@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.fastjetservice.photoresizer.presentation.ui.ImageScreen
+import com.fastjetservice.photoresizer.presentation.ui.navigation.NavGraph
 import com.fastjetservice.photoresizer.presentation.ui.theme.PhotoResizerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PhotoResizerTheme {
-                ImageScreen()
+                NavGraph()
             }
         }
     }

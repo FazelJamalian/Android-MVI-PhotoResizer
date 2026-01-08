@@ -1,6 +1,8 @@
 package com.fastjetservice.photoresizer.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.text.format.Formatter
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -56,15 +58,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
-import com.fastjetservice.photoresizer.presentation.intent.ImageIntent
-import com.fastjetservice.photoresizer.presentation.viewmodel.ImageViewModel
+import com.fastjetservice.photoresizer.data.FFmpegImageCompressor
+import com.fastjetservice.photoresizer.presentation.ui.intent.EditIntent
+import com.fastjetservice.photoresizer.presentation.viewmodel.EditViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageScreen(viewModel: ImageViewModel = hiltViewModel()) {
+fun ImageScreen(viewModel: EditViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -74,19 +78,19 @@ fun ImageScreen(viewModel: ImageViewModel = hiltViewModel()) {
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            uri?.let { viewModel.handleIntent(ImageIntent.PickImage(it)) }
+            uri?.let { viewModel.handleIntent(EditIntent.PickImage(it)) }
         }
     )
 
-    LaunchedEffect(state.error, state.outputFileUri) {
+    LaunchedEffect(state.error, state.compressedUri) {
         state.error?.let {
             snackbarHostState.showSnackbar(
                 message = "خطا: $it",
                 duration = SnackbarDuration.Long
             )
-            viewModel.handleIntent(ImageIntent.ClearError(""))
+            viewModel.handleIntent(EditIntent.ClearError(""))
         }
-        state.outputFileUri?.let { uri ->
+        state.compressedUri?.let { uri ->
             val result = snackbarHostState.showSnackbar(
                 message = "فایل با موفقیت ذخیره شد",
                 actionLabel = "باز کردن",
@@ -109,7 +113,7 @@ fun ImageScreen(viewModel: ImageViewModel = hiltViewModel()) {
                 title = { Text("فشرده‌ساز عکس") },
                 actions = {
                     IconButton(
-                        onClick = { viewModel.handleIntent(ImageIntent.Reset) },
+                        onClick = { viewModel.handleIntent(EditIntent.Reset) },
                         enabled = state.imageUri != null
                     ) {
                         Icon(Icons.Default.Refresh, contentDescription = "ریست")
@@ -194,7 +198,7 @@ fun ImageScreen(viewModel: ImageViewModel = hiltViewModel()) {
                 Spacer(Modifier.height(8.dp))
 
                 Button(
-                    onClick = { state.imageUri?.let { viewModel.handleIntent(ImageIntent.Compress(it)) } },
+                    onClick = { state.imageUri?.let { viewModel.handleIntent(EditIntent.Compress(it)) } },
                     enabled = state.imageUri != null && !state.isResizing,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -227,9 +231,22 @@ fun ImageScreen(viewModel: ImageViewModel = hiltViewModel()) {
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun ImageScreenPreview() {
+    val fakeViewModel = EditViewModel(
+        ffmpegCompressor = FFmpegImageCompressor(LocalContext.current),
+        context = LocalContext.current
+    )
+    ImageScreen(fakeViewModel)
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OptionsPanel(viewModel: ImageViewModel) {
+fun OptionsPanel(viewModel: EditViewModel) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     Column {
@@ -241,7 +258,7 @@ fun OptionsPanel(viewModel: ImageViewModel) {
             Text("حجم اصلی", style = MaterialTheme.typography.bodyLarge)
             state.originalSize?.let {
                 Text(
-                    android.text.format.Formatter.formatShortFileSize(context, it),
+                    Formatter.formatShortFileSize(context, it),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -252,9 +269,9 @@ fun OptionsPanel(viewModel: ImageViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("حجم تخمینی", style = MaterialTheme.typography.bodyLarge)
-            state.estimatedSize?.let {
+            state.reducedSize?.let {
                 Text(
-                    android.text.format.Formatter.formatShortFileSize(context, it),
+                    Formatter.formatShortFileSize(context, it),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -266,7 +283,7 @@ fun OptionsPanel(viewModel: ImageViewModel) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(
             value = state.width.toString(),
-            onValueChange = { viewModel.handleIntent(ImageIntent.SetWidth(it.toIntOrNull() ?: 0)) },
+            onValueChange = { viewModel.handleIntent(EditIntent.SetWidth(it.toIntOrNull() ?: 0)) },
             label = { Text("عرض (px)") },
             modifier = Modifier.weight(1f),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -275,7 +292,7 @@ fun OptionsPanel(viewModel: ImageViewModel) {
             value = state.height.toString(),
             onValueChange = {
                 viewModel.handleIntent(
-                    ImageIntent.SetHeight(
+                    EditIntent.SetHeight(
                         it.toIntOrNull() ?: 0
                     )
                 )
@@ -297,7 +314,7 @@ fun OptionsPanel(viewModel: ImageViewModel) {
     )
     Slider(
         value = state.quality.toFloat(),
-        onValueChange = { viewModel.handleIntent(ImageIntent.SetQuality(it.toInt())) },
+        onValueChange = { viewModel.handleIntent(EditIntent.SetQuality(it.toInt())) },
         valueRange = 1f..100f,
         steps = 98,
         enabled = !isPng
@@ -330,7 +347,7 @@ fun OptionsPanel(viewModel: ImageViewModel) {
                 DropdownMenuItem(
                     text = { Text(format.uppercase()) },
                     onClick = {
-                        viewModel.handleIntent(ImageIntent.SetFormat(format))
+                        viewModel.handleIntent(EditIntent.SetFormat(format))
                         expanded = false
                     }
                 )
